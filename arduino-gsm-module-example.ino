@@ -2,58 +2,54 @@
 
 SoftwareSerial mySerial(10, 11); // RX, TX
 
-char ctl_z = 0x1A;
-
-void setup() {
+void setup()
+{
   Serial.begin(9600);
-  while (!Serial) {
+  while (!Serial)
+  {
     // wait serial port initialization
   }
 
   mySerial.begin(9600);
-  while (!mySerial) {
+  while (!mySerial)
+  {
     // wait serial port initialization
   }
 
-//  mySerial.println("AT");
-//  delay(100);
-//  
-//  mySerial.println("AT+CMGF=1");
-//  delay(1000); 
-//  
-//  mySerial.println("AT+CPIN=\"1234\"");
-//  delay(1000);
-//  
-//  mySerial.println("AT+CMGS=\"+639127247880\"<CR>Sending text messages is easy.<Ctrl+z>");
-//  delay(1000);
-
-Serial.println("test only");
+  Serial.println("test only");
 }
 
-void loop() {
+void loop()
+{
 
   mySerial.setTimeout(1000);
-  
-  if (mySerial.available()) {
+
+  if (mySerial.available())
+  {
     String received = mySerial.readStringUntil('\n');
-    
+
     Serial.println(received);
   }
-  
-  if (Serial.available()) {
+
+  if (Serial.available())
+  {
     String received2 = Serial.readStringUntil('\n');
 
-    if (String(received2) == "send") {
-      
-      mySerial.print("AT+CMGS=\"");
-      mySerial.print("9127247880");
-      mySerial.print("\"\r");
-      mySerial.print("test message only!\r\n" + ctl_z);
+    if (String(received2) == "send")
+    {
+      mySerial.println("AT+CMGF=1");                   // Sets the GSM Module in Text Mode
+      delay(1000);                                     // Delay of 1000 milli seconds or 1 second
+      mySerial.println("AT+CMGS=\"+639159524049\"\r"); // Replace x with mobile number
+      delay(1000);
+      mySerial.println("I am SMS from GSM Module"); // The SMS text you want to send
       delay(100);
-      
+      mySerial.println((char)26); // ASCII code of CTRL+Z
+      delay(1000);
+
       Serial.println("na send!");
     }
-    else {
+    else
+    {
       mySerial.print(received2 + "\r\n");
       delay(100);
     }
