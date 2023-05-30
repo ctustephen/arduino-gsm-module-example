@@ -45,8 +45,6 @@ void loop()
       delay(100);
       mySerial.println((char)26); // ASCII code of CTRL+Z
       delay(1000);
-
-      Serial.println("na send!");
     }
     else
     {
